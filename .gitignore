@@ -35,7 +35,11 @@ ipch/
 libgdx-*.zip
 libgdx-*.zip.MD5
 
+.gradle/
+
 *.iml
+*.ipr
+*.iws
 /.idea/
 
 #core & extension libs/ folders that have no 3rd party dependencies in them
