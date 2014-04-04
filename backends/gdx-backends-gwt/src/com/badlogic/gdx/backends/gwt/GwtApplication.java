@@ -77,6 +77,7 @@ public abstract class GwtApplication implements EntryPoint, Application {
 	private ObjectMap<String, Preferences> prefs = new ObjectMap<String, Preferences>();
 	private Clipboard clipboard;
 	LoadingListener loadingListener;
+	private Timer timer;
 
 	/** @return the configuration for the {@link GwtApplication}. */
 	public abstract GwtApplicationConfiguration getConfig ();
@@ -189,17 +190,19 @@ public abstract class GwtApplication implements EntryPoint, Application {
 		}
 
 		// setup rendering timer
-		new Timer() {
+		timer = new Timer() {
 			@Override
 			public void run () {
 				try {
 					mainLoop();
 				} catch (Throwable t) {
 					error("GwtApplication", "exception: " + t.getMessage(), t);
+					timer.cancel();
 					throw new RuntimeException(t);
 				}
 			}
-		}.scheduleRepeating((int)((1f / config.fps) * 1000));
+		};
+		timer.scheduleRepeating((int)((1f / config.fps) * 1000));
 	}
 
 	void mainLoop() {
