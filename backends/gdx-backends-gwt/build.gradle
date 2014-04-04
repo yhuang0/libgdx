@@ -16,8 +16,13 @@ dependencies {
     )
 }
 
-sourceSets.main.java {
-    srcDir 'src'
+sourceSets.main {
+    java {
+        srcDir 'src'
+    }
+    resources {
+        srcDir 'src'
+    }
 }
 
 compileJava {
@@ -26,6 +31,7 @@ compileJava {
 
 task sourceJar(type: Jar) {
     from sourceSets.main.allJava
+    from sourceSets.main.resources
 }
 
 publishing {
