@@ -1,0 +1,43 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'maven-publish'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+}
+
+dependencies {
+    compile (
+        'com.badlogicgames.gdx:gdx:1.0-SNAPSHOT',
+        'com.google.gwt:gwt-user:2.6.0',
+        'com.google.gwt:gwt-dev:2.6.0'
+    )
+}
+
+sourceSets.main.java {
+    srcDir 'src'
+}
+
+compileJava {
+    exclude 'com/badlogic/gdx/backends/gwt/emu/java/lang/System.java'
+}
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId 'com.badlogicgames.gdx'
+            artifactId 'gdx-backend-gwt'
+            version '1.0-SNAPSHOT'
+            from components.java
+            artifact sourceJar {
+                classifier 'sources'
+            }
+        }
+    }
+}
